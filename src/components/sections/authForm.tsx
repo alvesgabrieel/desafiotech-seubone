@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
+import TopBar from "../topBar";
+
 interface AuthFormValues {
   username: string;
   email?: string;
@@ -35,7 +37,6 @@ export const AuthForm = ({
   type,
   logoForm,
   footerImage,
-  mainLogo,
   onSubmit,
 }: AuthFormProps) => {
   const formSchema = z.object({
@@ -66,17 +67,9 @@ export const AuthForm = ({
   return (
     <>
       <div>
-        <div className="flex h-16 items-center bg-[#440986]">
-          <Image
-            src={mainLogo}
-            alt="Fanation Logo"
-            width={120}
-            height={40}
-            className="ml-8"
-          />
-        </div>
-        <div className="flex min-h-screen items-center justify-center bg-gray-100">
-          <div className="w-full max-w-md rounded-lg bg-gray-100 p-8">
+        <TopBar />
+        <div className="flex min-h-screen items-center justify-center">
+          <div className="w-full max-w-md rounded-lg p-8">
             <div className="flex items-center justify-center">
               <Image
                 src={logoForm}
@@ -176,7 +169,7 @@ export const AuthForm = ({
           </div>
         </div>
       </div>
-      <div className="flex justify-center bg-gray-100 pb-4">
+      <div className="flex justify-center pb-4">
         <span>
           <Image
             src={footerImage}

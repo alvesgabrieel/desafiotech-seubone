@@ -40,7 +40,7 @@ export async function POST(request: Request) {
     );
 
     return NextResponse.json(
-      { token, user: { name: user.username } },
+      { token, user: { name: user.username, email: user.email } },
       { status: 200 },
     );
   } catch (err) {

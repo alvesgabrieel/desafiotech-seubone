@@ -38,7 +38,7 @@ const Login = () => {
       });
 
       const data = await response.json();
-      login(data.token, { username: data.user.name });
+      login(data.token, { username: data.user.name, email: data.user.email });
       router.push("/dashboard");
       toast.success("Login efetuado com sucesso!");
     } catch (err) {
