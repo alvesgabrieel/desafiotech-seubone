@@ -108,6 +108,7 @@ export const AuthForm = ({
                         <Input
                           placeholder="Digite seu nome de usuário"
                           {...field}
+                          className="bg-amber-50"
                         />
                       </FormControl>
                       <FormMessage />
@@ -127,6 +128,7 @@ export const AuthForm = ({
                             placeholder="Digite seu email"
                             {...field}
                             type="email"
+                            className="bg-amber-50"
                           />
                         </FormControl>
                         <FormMessage />
@@ -146,6 +148,7 @@ export const AuthForm = ({
                           placeholder="Digite sua senha"
                           {...field}
                           type="password"
+                          className="bg-amber-50"
                         />
                       </FormControl>
                       <FormMessage />
@@ -156,7 +159,7 @@ export const AuthForm = ({
                 <Button
                   type="submit"
                   disabled={form.formState.isSubmitting}
-                  className="mt-4 w-full bg-[#9A0FF1]"
+                  className="mt-4 w-full cursor-pointer bg-[#9A0FF1] hover:bg-violet-600"
                 >
                   {type === "login" ? "Entrar" : "Cadastrar"}
                 </Button>

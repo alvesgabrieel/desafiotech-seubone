@@ -14,29 +14,28 @@ datasource db {
 }
 
 model User {
-  id String @id @default(uuid())
-  username String
-  nome String
-  email String
-  senha String
+  id        String   @id @default(uuid())
+  username  String   @unique
+  email     String
+  senha     String
   createdAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+  updateAt  DateTime @updatedAt
 }
 
 model CutOut {
-  id String @id @default(uuid())
-  sku String @unique
-  nome String
+  id                String      @id @default(uuid())
+  sku               String      @unique
+  nome              String
   ordemDeExibição Int
-  tipoRecorte TipoRecorte
-  posicaoRecorte Posicao
-  tipoProduto Modelo
-  materialRecorte Tecido
-  corMaterial Cores
-  status Status 
-  imageURL String
-  createdAt DateTime @default(now())
-  updateAt DateTime @updatedAt 
+  tipoRecorte       TipoRecorte
+  posicaoRecorte    Posicao
+  tipoProduto       Modelo
+  materialRecorte   Tecido
+  corMaterial       Cores
+  status            Status
+  imageURL          String
+  createdAt         DateTime    @default(now())
+  updateAt          DateTime    @updatedAt
 }
 
 enum TipoRecorte {
@@ -65,7 +64,7 @@ enum Posicao {
   LATERAL
 }
 
-enum Status { 
-  ATIVO 
-  INATIVO  
+enum Status {
+  ATIVO
+  INATIVO
 }
