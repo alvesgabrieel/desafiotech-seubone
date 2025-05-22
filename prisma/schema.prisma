@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(uuid())
+  username String
+  nome String
+  email String
+  senha String
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+}
+
+model CutOut {
+  id String @id @default(uuid())
+  sku String @unique
+  nome String
+  ordemDeExibição Int
+  tipoRecorte TipoRecorte
+  posicaoRecorte Posicao
+  tipoProduto Modelo
+  materialRecorte Tecido
+  corMaterial Cores
+  status Status 
+  imageURL String
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt 
+}
+
+enum TipoRecorte {
+  FRENTE
+  ABA
+  LATERAL
+}
+
+enum Modelo {
+  TRUCKER
+  AMERICANO
+}
+
+enum Tecido {
+  LINHO
+}
+
+enum Cores {
+  AZUL_MARINHO
+  LARANJA
+}
+
+enum Posicao {
+  FRENTE
+  TRASEIRA
+  LATERAL
+}
+
+enum Status { 
+  ATIVO 
+  INATIVO  
+}
