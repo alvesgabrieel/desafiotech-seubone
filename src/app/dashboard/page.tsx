@@ -1,11 +1,12 @@
 "use client";
 
-import { Loader } from "lucide-react";
+import { Loader, Search } from "lucide-react";
 
 import { AppSidebar } from "@/components/app-sidebar";
 import { ModeToggle } from "@/components/mode-toogle";
 import ProtectedRoute from "@/components/protectedRoute";
 import {} from "@/components/ui/breadcrumb";
+import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
@@ -14,12 +15,15 @@ import {
 } from "@/components/ui/sidebar";
 import { useAuthStore } from "@/store/authStore";
 
+import CortesTable from "../cortes/dados-tabela";
+import { DialogDemo } from "./registrar-peca-dialog";
+
 export default function Page() {
   const { isLoading } = useAuthStore();
 
   if (isLoading)
     return (
-      <div className="flex h-screen w-screen items-center justify-center bg-white">
+      <div className="flex h-screen w-screen items-center justify-center">
         <Loader className="h-10 w-10 animate-spin text-gray-500" />
       </div>
     );
@@ -37,30 +41,31 @@ export default function Page() {
                 className="mr-2 data-[orientation=vertical]:h-4"
               />
               <ModeToggle />
-              {/* <Breadcrumb>
-                <BreadcrumbList>
-                  <BreadcrumbItem className="hidden md:block">
-                    <BreadcrumbLink href="#">
-                      Building Your Application
-                    </BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator className="hidden md:block" />
-                  <BreadcrumbItem>
-                    <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                  </BreadcrumbItem>
-                  <ModeToggle />
-                </BreadcrumbList>
-              </Breadcrumb> */}
             </div>
           </header>
-          <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-            <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-              <div className="bg-muted/50 aspect-video rounded-xl" />
-              <div className="bg-muted/50 aspect-video rounded-xl" />
-              <div className="bg-muted/50 aspect-video rounded-xl" />
+          <div className="flex justify-between">
+            <div className="px-7">
+              <p className="text-2xl">Peças gerais</p>
             </div>
-            <div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min" />
+            <div className="px-7">
+              <DialogDemo />
+            </div>
           </div>
+          <div className="my-7 flex justify-between">
+            <div className="flex items-center gap-3 px-7">
+              <div>Todos (7)</div>
+              <div>Ativos (5)</div>
+              <div>Expirados (2)</div>
+            </div>
+            <div className="px-7">
+              <div className="relative">
+                <Search className="absolute top-1.5 left-2" />
+                <Input className="pl-10" />
+              </div>
+            </div>
+          </div>
+
+          <CortesTable />
         </SidebarInset>
       </SidebarProvider>
     </ProtectedRoute>
