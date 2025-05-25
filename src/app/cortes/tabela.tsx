@@ -1,5 +1,6 @@
 "use client";
 
+import { CutOut } from "@prisma/client";
 import {
   ColumnDef,
   flexRender,
@@ -7,6 +8,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
+import { Progress } from "@/components/ui/progress";
 import {
   Table,
   TableBody,
@@ -16,15 +18,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+interface DataTableProps {
+  columns: ColumnDef<CutOut>[];
+  data: CutOut[];
+  viewMore: (peca: CutOut) => void;
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable({
   columns,
   data,
-}: DataTableProps<TData, TValue>) {
+  viewMore,
+}: DataTableProps) {
   const table = useReactTable({
     data,
     columns,
@@ -33,23 +37,20 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="w-full overflow-auto rounded-md border">
-      {" "}
       <Table className="w-full min-w-full">
-        <TableHeader>
+        <TableHeader className="bg-muted">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                  </TableHead>
-                );
-              })}
+              {headerGroup.headers.map((header) => (
+                <TableHead key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                </TableHead>
+              ))}
             </TableRow>
           ))}
         </TableHeader>
@@ -58,6 +59,8 @@ export function DataTable<TData, TValue>({
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
+                onClick={() => viewMore(row.original)}
+                className="cursor-pointer hover:bg-muted/50 transition-colors"
                 data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (
@@ -70,7 +73,7 @@ export function DataTable<TData, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                <Progress value={2} />
               </TableCell>
             </TableRow>
           )}

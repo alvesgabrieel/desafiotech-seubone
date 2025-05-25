@@ -1,26 +1,19 @@
-"use client"; // Adicione isso no topo
+"use client";
 
-import { useEffect, useState } from "react";
+import { CutOut } from "@prisma/client";
 
 import { columns } from "./colunas";
 import { DataTable } from "./tabela";
 
-export default function CortesTable() {
-  const [data, setData] = useState([]);
+interface CortesTableProps {  
+  peca: CutOut[];
+  handleView: (peca: CutOut) => void;
+}
 
-  useEffect(() => {
-    async function fetchData() {
-      const response = await fetch("/api/cortes/read");
-      const result = await response.json();
-      setData(result);
-    }
-
-    fetchData();
-  }, []);
-
+export default function CortesTable({ peca, handleView }: CortesTableProps) {
   return (
     <div className="container mx-auto px-7">
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={columns} data={peca} viewMore={handleView} />
     </div>
   );
 }

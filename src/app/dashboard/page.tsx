@@ -1,6 +1,8 @@
 "use client";
 
+import type { CutOut } from '@prisma/client';
 import { Loader, Search } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import { AppSidebar } from "@/components/app-sidebar";
 import { ModeToggle } from "@/components/mode-toogle";
@@ -16,10 +18,45 @@ import {
 import { useAuthStore } from "@/store/authStore";
 
 import CortesTable from "../cortes/dados-tabela";
-import { DialogDemo } from "./registrar-peca-dialog";
+import { EditarPecaDialog } from './components/editar-peca-dialog';
+import { RegistrarPecaDialog } from "./components/registrar-peca-dialog";
+
 
 export default function Page() {
   const { isLoading } = useAuthStore();
+
+  const [peca, setPeca] = useState<CutOut[]>([]);
+
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [selectedPeca, setSelectedPeca] = useState<CutOut | null>(null)
+
+  useEffect(() => {
+    async function loadPecas() {
+      const response = await fetch("/api/cortes/read");
+      const data = await response.json();
+      setPeca(data);
+    }
+    loadPecas();
+  }, []);
+
+
+  const handleViewMore = (peca: CutOut) => {
+    setSelectedPeca(peca)
+    setIsEditDialogOpen(true)
+  }
+
+  const handleCloseDialog = () => {
+    setIsEditDialogOpen(false);
+    setSelectedPeca(null)
+  }
+
+  const handleSavePeca = (atualizarPeca: CutOut) => {
+    setPeca((prevPeca) => 
+      prevPeca.map((peca) => 
+        peca.id === atualizarPeca.id ? atualizarPeca : peca,
+      )
+    )
+  }
 
   if (isLoading)
     return (
@@ -48,7 +85,7 @@ export default function Page() {
               <p className="text-2xl">Peças gerais</p>
             </div>
             <div className="px-7">
-              <DialogDemo />
+              <RegistrarPecaDialog />
             </div>
           </div>
           <div className="my-7 flex justify-between">
@@ -65,7 +102,10 @@ export default function Page() {
             </div>
           </div>
 
-          <CortesTable />
+          <CortesTable peca={peca}  handleView={handleViewMore} />
+          {selectedPeca && (
+            <EditarPecaDialog peca={selectedPeca} isOpen={isEditDialogOpen} onClose={handleCloseDialog} onSave={handleSavePeca}/>
+          )}
         </SidebarInset>
       </SidebarProvider>
     </ProtectedRoute>
