@@ -6,14 +6,21 @@ export async function GET() {
   try {
     const cortes = await db.cutOut.findMany({
       select: {
+        id: true,
         key: true,
         sku: true,
         tipoProduto: true,
         ordemDeExibição: true,
         status: true,
+        tipoRecorte: true,
+        posicaoRecorte: true,
+        materialRecorte: true,
+        corMaterial: true,
+        imageURL: true,
+        createdAt: true
       },
       orderBy: {
-        id: "asc",
+        createdAt: "desc",
       },
     });
     return NextResponse.json(cortes, { status: 200 });
