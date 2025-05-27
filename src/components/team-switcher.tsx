@@ -25,7 +25,7 @@ export function TeamSwitcher({
 }: {
   teams: {
     name: string;
-    logo: React.ElementType | string; // aceita componente React ou string
+    logo: React.ElementType | string;
     plan: string;
   }[];
 }) {
@@ -34,7 +34,6 @@ export function TeamSwitcher({
 
   if (!activeTeam) return null;
 
-  // Função para renderizar o logo dependendo do tipo
   function RenderLogo({
     logo,
     alt,
@@ -43,7 +42,6 @@ export function TeamSwitcher({
     alt: string;
   }) {
     if (typeof logo === "string") {
-      // É string: caminho de imagem, usa Next Image
       return (
         <Image
           src={logo}
@@ -54,7 +52,7 @@ export function TeamSwitcher({
         />
       );
     }
-    // É componente React: renderiza como componente
+
     const LogoComponent = logo;
     return <LogoComponent className="size-6" />;
   }

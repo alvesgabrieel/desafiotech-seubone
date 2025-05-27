@@ -1,11 +1,10 @@
 "use client";
 
-import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
-import { AuthForm } from "@/components/sections/authForm";
+import { AuthForm } from "@/components/sections/auth-form";
 import { useAuthStore } from "@/store/authStore";
 
 import FooterImage from "../../../public/footer-img.png";
@@ -14,20 +13,13 @@ import Logo from "../../../public/logo-login.png";
 
 const Login = () => {
   const router = useRouter();
-  const { login, isAuthenticated, isLoading } = useAuthStore();
+  const { login, isAuthenticated } = useAuthStore();
 
   useEffect(() => {
     if (isAuthenticated) {
       router.push("/dashboard");
     }
   }, [isAuthenticated, router]);
-
-  if (isLoading)
-    return (
-      <div className="flex h-screen w-screen items-center justify-center bg-white">
-        <Loader className="h-10 w-10 animate-spin text-gray-500" />
-      </div>
-    );
 
   const handleSubmit = async (values: { username: string; senha: string }) => {
     try {
@@ -42,7 +34,7 @@ const Login = () => {
       router.push("/dashboard");
       toast.success("Login efetuado com sucesso!");
     } catch (err) {
-      toast.error("Ocorreu um erro, tente novamente");
+      toast.error("Ocorreu um erro, tente novamente!!");
       console.log(err);
     }
   };

@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/sidebar";
 import { useAuthStore } from "@/store/authStore";
 
-// This is sample data.
 const data = {
   teams: [
     {
@@ -27,13 +26,13 @@ const data = {
   navMain: [
     {
       title: "Peças",
-      url: "#",
+      url: "/dashboard",
       icon: Layers,
       isActive: true,
     },
     {
-      title: "Vizualização",
-      url: "#",
+      title: "Visualização",
+      url: "/visualizacao",
       icon: Eye,
     },
     {

@@ -1,13 +1,13 @@
 "use client";
 
-import type { CutOut } from '@prisma/client';
-import { Loader, Search } from "lucide-react";
+import type { CutOut } from "@prisma/client";
+import { Loader, Loader2, Search } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import { AppSidebar } from "@/components/app-sidebar";
 import { ModeToggle } from "@/components/mode-toogle";
-import ProtectedRoute from "@/components/protectedRoute";
-import {} from "@/components/ui/breadcrumb";
+import ProtectedRoute from "@/components/protected-route";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -17,53 +17,100 @@ import {
 } from "@/components/ui/sidebar";
 import { useAuthStore } from "@/store/authStore";
 
-import CortesTable from "../cortes/dados-tabela";
-import { EditarPecaDialog } from './components/editar-peca-dialog';
+import Table from "../tabela/tabela";
+import { EditarPecaDialog } from "./components/editar-peca-dialog";
 import { RegistrarPecaDialog } from "./components/registrar-peca-dialog";
 
-
 export default function Page() {
-  const { isLoading } = useAuthStore();
+  const { isLoading: isAuthLoading } = useAuthStore();
 
-  const [peca, setPeca] = useState<CutOut[]>([]);
+  const [pecas, setPecas] = useState<CutOut[]>([]);
+  const [isLoadingPecas, setIsLoadingPecas] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [selectedPeca, setSelectedPeca] = useState<CutOut | null>(null)
+  const [selectedPeca, setSelectedPeca] = useState<CutOut | null>(null);
 
   useEffect(() => {
-    async function loadPecas() {
-      const response = await fetch("/api/cortes/read");
-      const data = await response.json();
-      setPeca(data);
-    }
     loadPecas();
   }, []);
 
+  const loadPecas = async () => {
+    setIsLoadingPecas(true);
+    try {
+      const response = await fetch("/api/cortes/read");
 
-  const handleViewMore = (peca: CutOut) => {
-    setSelectedPeca(peca)
-    setIsEditDialogOpen(true)
-  }
+      if (!response.ok) throw new Error("Falha ao carregar peças");
+      const data = await response.json();
+      setPecas(data);
+    } catch (error) {
+      console.error("Erro ao carregar peças:", error);
+      toast.error("Erro ao carregar peças");
+      setPecas([]);
+    } finally {
+      setIsLoadingPecas(false);
+    }
+  };
 
-  const handleCloseDialog = () => {
-    setIsEditDialogOpen(false);
-    setSelectedPeca(null)
-  }
+  const handleDelete = async (id: string) => {
+    if (deletingId) return; // Impede exclusões simultâneas
+
+    //>> Implementar dialog de confirmação
+
+    const confirmDelete = window.confirm(
+      "Tem certeza que deseja excluir esta peça? Esta ação não pode ser desfeita.",
+    );
+    if (!confirmDelete) {
+      return;
+    }
+    setDeletingId(id);
+    try {
+      const response = await fetch(`/api/cortes/delete?id=${id}`, {
+        method: "DELETE",
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        toast.error(data.message);
+      }
+
+      setPecas((prevPecas) => prevPecas.filter((p) => p.id !== id));
+      toast.success(data.message);
+    } catch (error) {
+      console.error("Erro ao deletar peça:", error);
+      toast.error("Erro ao excluir o registro");
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   const handleSavePeca = (atualizarPeca: CutOut) => {
-    setPeca((prevPeca) => 
-      prevPeca.map((peca) => 
+    setPecas((prevPecas) =>
+      prevPecas.map((peca) =>
         peca.id === atualizarPeca.id ? atualizarPeca : peca,
-      )
-    )
-  }
+      ),
+    );
+    //Atualizar a lista de forma automatica ao salvar uma peça, sem precisar da reload na pagina
+  };
 
-  if (isLoading)
+  const handleViewMore = (peca: CutOut) => {
+    setSelectedPeca(peca);
+    setIsEditDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setSelectedPeca(null);
+    setIsEditDialogOpen(false);
+  };
+
+  if (isAuthLoading) {
     return (
       <div className="flex h-screen w-screen items-center justify-center">
         <Loader className="h-10 w-10 animate-spin text-gray-500" />
       </div>
     );
+  }
 
   return (
     <ProtectedRoute>
@@ -80,31 +127,45 @@ export default function Page() {
               <ModeToggle />
             </div>
           </header>
-          <div className="flex justify-between">
-            <div className="px-7">
-              <p className="text-2xl">Peças gerais</p>
-            </div>
-            <div className="px-7">
-              <RegistrarPecaDialog />
-            </div>
+          <div className="flex justify-between px-7">
+            <p className="text-2xl">Peças gerais</p>
+            {/* Passar loadPecas para o dialog de registro atualizar a lista */}
+            <RegistrarPecaDialog onRegisterSuccess={loadPecas} />
           </div>
-          <div className="my-7 flex justify-between">
-            <div className="flex items-center gap-3 px-7">
-              <div>Todos (7)</div>
-              <div>Ativos (5)</div>
-              <div>Expirados (2)</div>
+          <div className="my-7 flex justify-between px-7">
+            {/* TODO: Implementar filtros e busca */}
+            <div className="flex items-center gap-3">
+              {/* Exemplo: <div>Todos ({pecas.length})</div> */}
             </div>
-            <div className="px-7">
-              <div className="relative">
-                <Search className="absolute top-1.5 left-2" />
-                <Input className="pl-10" />
-              </div>
+            <div className="relative">
+              <Search className="text-muted-foreground absolute top-1.5 left-2 h-5 w-5" />
+              <Input
+                placeholder="Buscar por título ou SKU..."
+                className="pl-10"
+              />
             </div>
           </div>
 
-          <CortesTable peca={peca}  handleView={handleViewMore} />
+          {isLoadingPecas ? (
+            <div className="flex items-center justify-center py-10">
+              <Loader2 className="text-muted-foreground h-8 w-8 animate-spin" />
+            </div>
+          ) : (
+            <Table
+              pecas={pecas}
+              handleView={handleViewMore}
+              handleDelete={handleDelete}
+              deletingId={deletingId}
+            />
+          )}
+
           {selectedPeca && (
-            <EditarPecaDialog peca={selectedPeca} isOpen={isEditDialogOpen} onClose={handleCloseDialog} onSave={handleSavePeca}/>
+            <EditarPecaDialog
+              peca={selectedPeca}
+              isOpen={isEditDialogOpen}
+              onClose={handleCloseDialog}
+              onSave={handleSavePeca}
+            />
           )}
         </SidebarInset>
       </SidebarProvider>

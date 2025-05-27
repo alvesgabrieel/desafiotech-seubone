@@ -38,7 +38,6 @@ export function NavMain({
       <SidebarMenu>
         {items.map((item) =>
           item.items && item.items.length > 0 ? (
-            // Com subitems: usa Collapsible
             <Collapsible
               key={item.title}
               asChild
@@ -69,7 +68,6 @@ export function NavMain({
               </SidebarMenuItem>
             </Collapsible>
           ) : (
-            // Sem subitems: botão clicável direto
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild tooltip={item.title}>
                 <a href={item.url} className="flex w-full items-center gap-2">

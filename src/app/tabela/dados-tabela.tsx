@@ -1,14 +1,14 @@
 "use client";
 
-import { CutOut } from "@prisma/client";
 import {
-  ColumnDef,
+  type ColumnDef,
   flexRender,
   getCoreRowModel,
+  type OnChangeFn,
+  type RowSelectionState,
   useReactTable,
 } from "@tanstack/react-table";
 
-import { Progress } from "@/components/ui/progress";
 import {
   Table,
   TableBody,
@@ -18,27 +18,39 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-interface DataTableProps {
-  columns: ColumnDef<CutOut>[];
-  data: CutOut[];
-  viewMore: (peca: CutOut) => void;
+interface DataTableProps<TData> {
+  columns: ColumnDef<TData>[];
+  data: TData[];
+  rowSelection?: RowSelectionState;
+  onRowSelectionChange?: OnChangeFn<RowSelectionState>;
+  meta?: {
+    handleDelete?: (id: string) => void;
+    deletingId?: string | null;
+  };
 }
 
-export function DataTable({
+export function DataTable<TData>({
   columns,
   data,
-  viewMore,
-}: DataTableProps) {
+  rowSelection,
+  onRowSelectionChange,
+  meta,
+}: DataTableProps<TData>) {
   const table = useReactTable({
     data,
     columns,
+    state: {
+      rowSelection,
+    },
+    onRowSelectionChange,
     getCoreRowModel: getCoreRowModel(),
+    meta,
   });
 
   return (
-    <div className="w-full overflow-auto rounded-md border">
-      <Table className="w-full min-w-full">
-        <TableHeader className="bg-muted">
+    <div className="rounded-md border">
+      <Table>
+        <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
@@ -47,7 +59,7 @@ export function DataTable({
                     ? null
                     : flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )}
                 </TableHead>
               ))}
@@ -59,8 +71,6 @@ export function DataTable({
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                onClick={() => viewMore(row.original)}
-                className="cursor-pointer hover:bg-muted/50 transition-colors"
                 data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (
@@ -73,7 +83,7 @@ export function DataTable({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                <Progress value={2} />
+                Nenhum resultado encontrado.
               </TableCell>
             </TableRow>
           )}

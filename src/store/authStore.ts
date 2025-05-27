@@ -1,14 +1,11 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-type User = {
-  username: string;
-  email: string;
-};
+import { User } from "@/types/user";
 
 type AuthState = {
   token: string | null;
-  user: { username: string, email: string } | null;
+  user: { username: string; email: string } | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (token: string, user: User) => void;

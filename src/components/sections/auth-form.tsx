@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import TopBar from "../topBar";
+import TopBar from "../top-bar";
 
 interface AuthFormValues {
   username: string;

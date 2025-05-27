@@ -17,7 +17,6 @@ export function ModeToggle() {
   const { setTheme, theme } = useTheme();
   const { isAuthenticated } = useAuthStore();
 
-  // Força o tema claro se o usuário não estiver autenticado
   React.useEffect(() => {
     if (!isAuthenticated && theme !== "light") {
       setTheme("light");
