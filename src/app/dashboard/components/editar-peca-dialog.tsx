@@ -30,6 +30,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { formatEnumValue } from "@/utils/formatEnumValue";
 
 interface EditarPecaDialogProps {
   peca: CutOut;
@@ -115,8 +116,12 @@ export const EditarPecaDialog = ({
                     className="border-input ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring text-foreground col-span-3 flex h-10 w-full rounded-md border bg-amber-50 px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-[#b1b1b10f] dark:text-white"
                   >
                     {modelo.map((modeloProduto) => (
-                      <option key={modeloProduto} value={modeloProduto}>
-                        {modeloProduto}
+                      <option
+                        key={modeloProduto}
+                        value={modeloProduto}
+                        className="bg-amber-50 dark:bg-neutral-800"
+                      >
+                        {formatEnumValue(modeloProduto)}
                       </option>
                     ))}
                   </select>
@@ -132,8 +137,12 @@ export const EditarPecaDialog = ({
                     className="border-input ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring text-foreground col-span-3 flex h-10 w-full rounded-md border bg-amber-50 px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-[#b1b1b10f] dark:text-white"
                   >
                     {recorte.map((tipoRecorte) => (
-                      <option key={tipoRecorte} value={tipoRecorte}>
-                        {tipoRecorte}
+                      <option
+                        key={tipoRecorte}
+                        value={tipoRecorte}
+                        className="bg-amber-50 dark:bg-neutral-800"
+                      >
+                        {formatEnumValue(tipoRecorte)}
                       </option>
                     ))}
                   </select>
@@ -151,8 +160,12 @@ export const EditarPecaDialog = ({
                     className="border-input ring-offset-background text-foreground placeholder:text-muted-foreground focus-visible:ring-ring col-span-3 flex h-10 w-full rounded-md border bg-amber-50 px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-[#b1b1b10f] dark:text-white"
                   >
                     {posicao.map((posicaoRecorte) => (
-                      <option key={posicaoRecorte} value={posicaoRecorte}>
-                        {posicaoRecorte}
+                      <option
+                        key={posicaoRecorte}
+                        value={posicaoRecorte}
+                        className="bg-amber-50 dark:bg-neutral-800"
+                      >
+                        {formatEnumValue(posicaoRecorte)}
                       </option>
                     ))}
                   </select>
@@ -183,8 +196,12 @@ export const EditarPecaDialog = ({
                     className="border-input ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring text-foreground col-span-3 flex h-10 w-full rounded-md border bg-amber-50 px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-[#b1b1b10f] dark:text-white"
                   >
                     {tecido.map((materialRecorte) => (
-                      <option key={materialRecorte} value={materialRecorte}>
-                        {materialRecorte}
+                      <option
+                        key={materialRecorte}
+                        value={materialRecorte}
+                        className="bg-amber-50 dark:bg-neutral-800"
+                      >
+                        {formatEnumValue(materialRecorte)}
                       </option>
                     ))}
                   </select>
@@ -200,8 +217,12 @@ export const EditarPecaDialog = ({
                     className="border-input ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring text-foreground col-span-3 flex h-10 w-full rounded-md border bg-amber-50 px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-[#b1b1b10f] dark:text-white"
                   >
                     {cores.map((corMaterial) => (
-                      <option key={corMaterial} value={corMaterial}>
-                        {corMaterial}
+                      <option
+                        key={corMaterial}
+                        value={corMaterial}
+                        className="bg-amber-50 dark:bg-neutral-800"
+                      >
+                        {formatEnumValue(corMaterial)}
                       </option>
                     ))}
                   </select>
