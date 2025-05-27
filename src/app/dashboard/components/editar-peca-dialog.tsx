@@ -9,6 +9,7 @@ import {
   Tecido,
   TipoRecorte,
 } from "@prisma/client";
+import { CopyIcon } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -269,20 +270,40 @@ export const EditarPecaDialog = ({
                   value={editPeca.sku}
                   onChange={handleChange}
                   className="text-foreground bg-amber-50 dark:bg-[#b1b1b10f] dark:text-white"
+                  readOnly
                 />
               </div>
-              <div>
-                <Label htmlFor="key" className="mb-2">
-                  Link da Imagem
-                </Label>
-                <Input
-                  id="key"
-                  name="key"
-                  value={editPeca.key}
-                  readOnly
-                  disabled
-                  className="text-foreground bg-amber-50 dark:bg-[#b1b1b10f] dark:text-white"
-                />
+              <div className="flex items-end gap-2">
+                <div className="flex-1">
+                  <Label htmlFor="key" className="mb-2">
+                    Link da Imagem
+                  </Label>
+                  <Input
+                    id="key"
+                    name="key"
+                    value={editPeca.imageURL}
+                    readOnly
+                    className="text-foreground bg-amber-50 dark:bg-[#b1b1b10f] dark:text-white"
+                  />
+                </div>
+
+                <Button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard
+                      .writeText(editPeca.imageURL)
+                      .then(() => {
+                        // Feedback visual opcional (toast/alert)
+                        alert("URL copiada com sucesso!");
+                      })
+                      .catch((err) => {
+                        console.error("Falha ao copiar: ", err);
+                      });
+                  }}
+                  className="h-10"
+                >
+                  <CopyIcon />
+                </Button>
               </div>
             </div>
           </div>
