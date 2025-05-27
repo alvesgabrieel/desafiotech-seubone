@@ -96,13 +96,15 @@ export default function Visualizacao() {
               isVisualizacao={true}
             />
           )}
-          <Button
-            className="mt-5"
-            onClick={handleGenerateImage}
-            disabled={selectedIds.length === 0}
-          >
-            Gerar imagem
-          </Button>
+          <div className="flex justify-center">
+            <Button
+              className="mt-5"
+              onClick={handleGenerateImage}
+              disabled={selectedIds.length === 0}
+            >
+              Gerar imagem
+            </Button>
+          </div>
           <MontarImagemDialog
             isOpen={isDialogOpen}
             onClose={() => setIsDialogOpen(false)}
