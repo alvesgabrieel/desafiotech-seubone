@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
+import { useTheme } from "next-themes";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -33,12 +34,12 @@ type AuthFormProps = {
   onSubmit: (values: AuthFormValues) => void;
 };
 
-export const AuthForm = ({
-  type,
-  logoForm,
-  footerImage,
-  onSubmit,
-}: AuthFormProps) => {
+export const AuthForm = ({ type, footerImage, onSubmit }: AuthFormProps) => {
+  const { theme } = useTheme();
+
+  const logoSrc =
+    theme === "dark" ? "/logo-form-login-white.png" : "/logo-form-login.png";
+
   const formSchema = z.object({
     username: z.string().min(1, {
       message: "Digite um nome de usuário",
@@ -72,7 +73,7 @@ export const AuthForm = ({
           <div className="w-full max-w-md rounded-lg p-8">
             <div className="flex items-center justify-center">
               <Image
-                src={logoForm}
+                src={logoSrc}
                 alt="Fanation Logo"
                 width={120}
                 height={40}
