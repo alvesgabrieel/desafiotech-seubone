@@ -172,7 +172,7 @@ export default function Page() {
           </div>
 
           <div className="my-4 flex flex-col gap-4 px-4 sm:my-7 sm:flex-row sm:justify-between sm:px-6">
-            <div className="flex gap-7">
+            <div className="flex justify-center gap-7">
               <Button
                 variant="ghost"
                 onClick={() => handleStatusFilterChange("TODOS")}
@@ -197,6 +197,7 @@ export default function Page() {
                 Inativos
               </Button>
             </div>
+
             <div className="relative w-full sm:w-auto">
               <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 sm:h-5 sm:w-5" />
               <Input

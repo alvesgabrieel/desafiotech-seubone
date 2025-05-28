@@ -429,7 +429,7 @@ export function RegistrarPecaDialog({
                 {statusMessage}
               </p>
             )}
-            <div className="flex w-full gap-2 sm:w-auto">
+            <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
               <DialogClose asChild>
                 <Button
                   type="button"
