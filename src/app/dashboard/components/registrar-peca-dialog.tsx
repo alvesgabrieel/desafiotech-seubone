@@ -195,8 +195,8 @@ export function RegistrarPecaDialog({
         </Button>
       </DialogTrigger>
       <DialogContent
-        className="h-[80vh] overflow-auto rounded-lg p-6"
-        style={{ width: "80vw", maxWidth: "none" }}
+        className="max-h-[90vh] overflow-auto p-4 sm:p-6"
+        style={{ width: "95vw", maxWidth: "none" }}
       >
         <form onSubmit={handleFormSubmit}>
           <DialogHeader>
@@ -205,157 +205,155 @@ export function RegistrarPecaDialog({
               Preencha os dados da peça e faça o upload da imagem do recorte.
             </DialogDescription>
           </DialogHeader>
-          <div className="grid h-full grid-rows-2 gap-4">
-            <div className="grid grid-cols-2 gap-4">
-              {/* Especificações */}
-              <div className="bg-muted grid gap-4 rounded p-4">
-                <p className="font-medium">Especificações</p>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="tipo-produto" className="mb-2">
-                      Modelo do produto *
-                    </Label>
-                    <Select
-                      value={modeloProduto}
-                      onValueChange={(v) => setModeloProduto(v as Modelo)}
-                      required
-                      disabled={isProcessing}
-                    >
-                      <SelectTrigger
-                        id="tipo-produto"
-                        className="w-full bg-amber-50"
-                      >
-                        <SelectValue placeholder="" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {Object.values(Modelo).map((values) => (
-                          <SelectItem key={values} value={values}>
-                            {formatEnumValue(values)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label htmlFor="tipo-recorte" className="mb-2">
-                      Tipo do recorte *
-                    </Label>
-                    <Select
-                      value={tipoRecorte}
-                      onValueChange={(v) => setTipoRecorte(v as TipoRecorte)}
-                      required
-                      disabled={isProcessing}
-                    >
-                      <SelectTrigger
-                        id="tipo-recorte"
-                        className="w-full bg-amber-50"
-                      >
-                        <SelectValue placeholder="" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {Object.values(TipoRecorte).map((value) => (
-                          <SelectItem key={value} value={value}>
-                            {formatEnumValue(value)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="posicao-recorte" className="mb-2">
-                      Posição do recorte *
-                    </Label>
-                    <Select
-                      value={posicaoRecorte}
-                      onValueChange={(v) => setPosicaoRecorte(v as Posicao)}
-                      required
-                      disabled={isProcessing}
-                    >
-                      <SelectTrigger
-                        id="posicao-recorte"
-                        className="w-full bg-amber-50"
-                      >
-                        <SelectValue placeholder="" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {Object.values(Posicao).map((values) => (
-                          <SelectItem key={values} value={values}>
-                            {formatEnumValue(values)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label htmlFor="ordem-exibicao" className="mb-2">
-                      Ordem de exibição *
-                    </Label>
-                    <Input
-                      id="ordem-exibicao"
-                      type="number"
-                      value={ordemDeExibicao}
-                      onChange={(e) => setOrdemDeExibicao(e.target.value)}
-                      required
+
+          <div className="grid gap-4">
+            {/* Especificações */}
+            <div className="bg-muted rounded p-4">
+              <p className="font-medium">Especificações</p>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div>
+                  <Label htmlFor="tipo-produto" className="mb-2">
+                    Modelo do produto *
+                  </Label>
+                  <Select
+                    value={modeloProduto}
+                    onValueChange={(v) => setModeloProduto(v as Modelo)}
+                    required
+                    disabled={isProcessing}
+                  >
+                    <SelectTrigger
+                      id="tipo-produto"
                       className="w-full bg-amber-50"
-                      disabled={isProcessing}
-                    />
-                  </div>
+                    >
+                      <SelectValue placeholder="" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.values(Modelo).map((values) => (
+                        <SelectItem key={values} value={values}>
+                          {formatEnumValue(values)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="tecido" className="mb-2">
-                      Tecido *
-                    </Label>
-                    <Select
-                      value={materialRecorte}
-                      onValueChange={(v) => setMaterialRecorte(v as Tecido)}
-                      required
-                      disabled={isProcessing}
+                <div>
+                  <Label htmlFor="tipo-recorte" className="mb-2">
+                    Tipo do recorte *
+                  </Label>
+                  <Select
+                    value={tipoRecorte}
+                    onValueChange={(v) => setTipoRecorte(v as TipoRecorte)}
+                    required
+                    disabled={isProcessing}
+                  >
+                    <SelectTrigger
+                      id="tipo-recorte"
+                      className="w-full bg-amber-50"
                     >
-                      <SelectTrigger id="tecido" className="w-full bg-amber-50">
-                        <SelectValue placeholder="" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {Object.values(Tecido).map((values) => (
-                          <SelectItem key={values} value={values}>
-                            {formatEnumValue(values)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label htmlFor="cor-material" className="mb-2">
-                      Cor do material *
-                    </Label>
-                    <Select
-                      value={corMaterial}
-                      onValueChange={(v) => setCorMaterial(v as Cores)}
-                      required
-                      disabled={isProcessing}
+                      <SelectValue placeholder="" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.values(TipoRecorte).map((value) => (
+                        <SelectItem key={value} value={value}>
+                          {formatEnumValue(value)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="posicao-recorte" className="mb-2">
+                    Posição do recorte *
+                  </Label>
+                  <Select
+                    value={posicaoRecorte}
+                    onValueChange={(v) => setPosicaoRecorte(v as Posicao)}
+                    required
+                    disabled={isProcessing}
+                  >
+                    <SelectTrigger
+                      id="posicao-recorte"
+                      className="w-full bg-amber-50"
                     >
-                      <SelectTrigger
-                        id="cor-material"
-                        className="w-full bg-amber-50"
-                      >
-                        <SelectValue placeholder="" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {Object.values(Cores).map((values) => (
-                          <SelectItem key={values} value={values}>
-                            {formatEnumValue(values)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+                      <SelectValue placeholder="" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.values(Posicao).map((values) => (
+                        <SelectItem key={values} value={values}>
+                          {formatEnumValue(values)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="ordem-exibicao" className="mb-2">
+                    Ordem de exibição *
+                  </Label>
+                  <Input
+                    id="ordem-exibicao"
+                    type="number"
+                    value={ordemDeExibicao}
+                    onChange={(e) => setOrdemDeExibicao(e.target.value)}
+                    required
+                    className="w-full bg-amber-50"
+                    disabled={isProcessing}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="tecido" className="mb-2">
+                    Tecido *
+                  </Label>
+                  <Select
+                    value={materialRecorte}
+                    onValueChange={(v) => setMaterialRecorte(v as Tecido)}
+                    required
+                    disabled={isProcessing}
+                  >
+                    <SelectTrigger id="tecido" className="w-full bg-amber-50">
+                      <SelectValue placeholder="" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.values(Tecido).map((values) => (
+                        <SelectItem key={values} value={values}>
+                          {formatEnumValue(values)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="cor-material" className="mb-2">
+                    Cor do material *
+                  </Label>
+                  <Select
+                    value={corMaterial}
+                    onValueChange={(v) => setCorMaterial(v as Cores)}
+                    required
+                    disabled={isProcessing}
+                  >
+                    <SelectTrigger
+                      id="cor-material"
+                      className="w-full bg-amber-50"
+                    >
+                      <SelectValue placeholder="" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.values(Cores).map((values) => (
+                        <SelectItem key={values} value={values}>
+                          {formatEnumValue(values)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
-              {/* Dados do produto */}
-              <div className="bg-muted grid gap-4 rounded p-4">
-                <p className="font-medium">Dados do produto</p>
+            </div>
+
+            {/* Dados do produto */}
+            <div className="bg-muted rounded p-4">
+              <p className="font-medium">Dados do produto</p>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
                   <Label htmlFor="sku" className="mb-2">
                     SKU *
@@ -372,11 +370,11 @@ export function RegistrarPecaDialog({
               </div>
             </div>
 
-            {/* upload da imagem  */}
-            <div className="bg-muted space-y-4 rounded p-4">
+            {/* upload da imagem */}
+            <div className="bg-muted rounded p-4">
               <h3 className="font-medium">Mídia *</h3>
-              <div className="mt-20 flex justify-evenly">
-                <div className="rounded-lg border-2 border-dashed border-gray-300 p-6 text-center">
+              <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-evenly">
+                <div className="w-full rounded-lg border-2 border-dashed border-gray-300 p-4 text-center sm:w-auto sm:p-6">
                   <Input
                     id="file-upload"
                     type="file"
@@ -409,39 +407,50 @@ export function RegistrarPecaDialog({
                   </label>
                 </div>
                 {/* Preview area */}
-                <div className="mt-4 text-center">
-                  {previewUrl && (
+                {previewUrl && (
+                  <div className="text-center">
                     <Image
                       width={330}
                       height={160}
                       src={previewUrl}
                       alt="Pré-visualização"
-                      className="mb-2 inline-block max-h-40 rounded"
+                      className="mb-2 inline-block max-h-40 max-w-full rounded object-contain"
                     />
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
 
-          <DialogFooter className="py-3">
-            {/* Display da mensagem do status  */}
+          <DialogFooter className="flex flex-col gap-2 pt-3 sm:flex-row">
+            {/* Display da mensagem do status */}
             {statusMessage && (
               <p className="text-muted-foreground mr-auto text-sm">
                 {statusMessage}
               </p>
             )}
-            <DialogClose asChild>
-              <Button type="button" variant="outline" disabled={isProcessing}>
-                Cancelar
+            <div className="flex w-full gap-2 sm:w-auto">
+              <DialogClose asChild>
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={isProcessing}
+                  className="w-full sm:w-auto"
+                >
+                  Cancelar
+                </Button>
+              </DialogClose>
+              <Button
+                type="submit"
+                disabled={isProcessing || !selectedFile}
+                className="w-full sm:w-auto"
+              >
+                {isProcessing ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : null}
+                {isProcessing ? "Salvando..." : "Cadastrar Peça"}
               </Button>
-            </DialogClose>
-            <Button type="submit" disabled={isProcessing || !selectedFile}>
-              {isProcessing ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : null}
-              {isProcessing ? "Salvando..." : "Cadastrar Peça"}
-            </Button>
+            </div>
           </DialogFooter>
         </form>
       </DialogContent>

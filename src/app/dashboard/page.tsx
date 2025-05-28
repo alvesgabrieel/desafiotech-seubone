@@ -117,47 +117,44 @@ export default function Page() {
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
-          <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-            <div className="flex items-center gap-2 px-4">
+          <header className="flex h-16 items-center gap-2 px-4 sm:px-6">
+            <div className="flex items-center gap-2">
               <SidebarTrigger className="-ml-1" />
-              <Separator
-                orientation="vertical"
-                className="mr-2 data-[orientation=vertical]:h-4"
-              />
+              <Separator orientation="vertical" className="mr-2 h-4" />
               <ModeToggle />
             </div>
           </header>
-          <div className="flex justify-between px-7">
-            <p className="text-2xl">Peças gerais</p>
-            {/* Passar loadPecas para o dialog de registro atualizar a lista */}
+
+          <div className="flex flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+            <h1 className="text-xl sm:text-2xl">Peças gerais</h1>
             <RegistrarPecaDialog onRegisterSuccess={loadPecas} />
           </div>
-          <div className="my-7 flex justify-between px-7">
-            {/* TODO: Implementar filtros e busca */}
-            <div className="flex items-center gap-3">
-              {/* Exemplo: <div>Todos ({pecas.length})</div> */}
-            </div>
-            <div className="relative">
-              <Search className="text-muted-foreground absolute top-1.5 left-2 h-5 w-5" />
+
+          <div className="my-4 flex flex-col gap-4 px-4 sm:my-7 sm:flex-row sm:justify-between sm:px-6">
+            <div className="flex-1"></div>
+            <div className="relative w-full sm:w-auto">
+              <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 sm:h-5 sm:w-5" />
               <Input
                 placeholder="Buscar por título ou SKU..."
-                className="pl-10"
+                className="w-full pl-10 sm:w-64"
               />
             </div>
           </div>
 
-          {isLoadingPecas ? (
-            <div className="flex items-center justify-center py-10">
-              <Loader2 className="text-muted-foreground h-8 w-8 animate-spin" />
-            </div>
-          ) : (
-            <Table
-              pecas={pecas}
-              handleView={handleViewMore}
-              handleDelete={handleDelete}
-              deletingId={deletingId}
-            />
-          )}
+          <div className="px-2 py-4 sm:px-6">
+            {isLoadingPecas ? (
+              <div className="flex items-center justify-center py-10">
+                <Loader2 className="h-8 w-8 animate-spin" />
+              </div>
+            ) : (
+              <Table
+                pecas={pecas}
+                handleView={handleViewMore}
+                handleDelete={handleDelete}
+                deletingId={deletingId}
+              />
+            )}
+          </div>
 
           {selectedPeca && (
             <EditarPecaDialog
