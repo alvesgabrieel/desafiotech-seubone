@@ -25,11 +25,10 @@ export default function Table({
 }: TableProps) {
   const [rowSelection, setRowSelection] = useState({});
   const [pagination, setPagination] = useState({
-    pageIndex: 0, // Página inicial
-    pageSize: 5, // 5 itens por página
+    pageIndex: 0,
+    pageSize: 5,
   });
 
-  // Atualiza seleção em modo visualização
   useEffect(() => {
     if (isVisualizacao && onSelectionChange) {
       const selectedIds = Object.keys(rowSelection).map(
@@ -40,7 +39,7 @@ export default function Table({
   }, [rowSelection, pecas, onSelectionChange, isVisualizacao]);
 
   return (
-    <div className="container mx-auto px-7">
+    <div className="container mx-auto px-2 sm:px-4 md:px-6">
       <DataTable
         columns={columns({
           showActions: !isVisualizacao,

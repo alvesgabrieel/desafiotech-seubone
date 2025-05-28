@@ -58,14 +58,14 @@ export function DataTable<TData>({
   });
 
   return (
-    <div>
-      <div className="rounded-md border">
-        <Table>
+    <div className="space-y-4">
+      <div className="overflow-x-auto rounded-md border">
+        <Table className="min-w-[600px]">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
+                  <TableHead key={header.id} className="whitespace-nowrap">
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -85,7 +85,7 @@ export function DataTable<TData>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="py-2">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
@@ -108,13 +108,13 @@ export function DataTable<TData>({
         </Table>
       </div>
 
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
         <div className="text-muted-foreground text-sm">
           Página {table.getState().pagination.pageIndex + 1} de{" "}
           {table.getPageCount()}
         </div>
 
-        <div className="flex items-center justify-end space-x-2 py-4">
+        <div className="flex items-center gap-2">
           <Button
             variant="outline"
             size="sm"

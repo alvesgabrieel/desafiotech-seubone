@@ -17,10 +17,16 @@ export const columns = (options: ColumnsOptions): ColumnDef<CutOut>[] => {
     {
       accessorKey: "key",
       header: "Título",
+      cell: ({ row }) => (
+        <span className="font-medium">{row.getValue("key")}</span>
+      ),
     },
     {
       accessorKey: "sku",
       header: "SKU",
+      cell: ({ row }) => (
+        <span className="text-muted-foreground">{row.getValue("sku")}</span>
+      ),
     },
     {
       accessorKey: "tipoProduto",
@@ -32,7 +38,7 @@ export const columns = (options: ColumnsOptions): ColumnDef<CutOut>[] => {
     },
     {
       accessorKey: "ordemDeExibição",
-      header: () => <div className="text-center">Ordem de exibição</div>,
+      header: () => <div className="text-center">Ordem</div>,
       cell: ({ row }) => {
         const ordem = row.getValue("ordemDeExibição");
         return <div className="flex justify-center">{Number(ordem)}</div>;
@@ -60,7 +66,6 @@ export const columns = (options: ColumnsOptions): ColumnDef<CutOut>[] => {
     },
   ];
 
-  // Adiciona colunas somente na página visualização
   if (!options.showActions) {
     baseColumns.unshift({
       id: "select",
@@ -69,6 +74,7 @@ export const columns = (options: ColumnsOptions): ColumnDef<CutOut>[] => {
           checked={table.getIsAllPageRowsSelected()}
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
           aria-label="Selecionar todos"
+          className="translate-y-[2px]"
         />
       ),
       cell: ({ row }) => (
@@ -76,14 +82,13 @@ export const columns = (options: ColumnsOptions): ColumnDef<CutOut>[] => {
           checked={row.getIsSelected()}
           onCheckedChange={(value) => row.toggleSelected(!!value)}
           aria-label="Selecionar linha"
+          className="translate-y-[2px]"
         />
       ),
-      enableSorting: false,
-      enableHiding: false,
+      size: 40,
     });
   }
 
-  // Adiciona colunas somente na página dashboard
   if (options.showActions) {
     baseColumns.push({
       id: "actions",
@@ -95,21 +100,21 @@ export const columns = (options: ColumnsOptions): ColumnDef<CutOut>[] => {
         };
 
         return (
-          <div className="flex space-x-2">
+          <div className="flex space-x-1">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => options.handleView?.(peca)}
-              className="cursor-pointer"
+              className="h-8 w-8 p-0"
             >
-              <Eye />
+              <Eye className="h-4 w-4" />
             </Button>
             <Button
               variant="ghost"
-              size="icon"
+              size="sm"
               disabled={meta?.deletingId === peca.id}
               onClick={() => meta?.handleDelete(peca.id)}
-              className="cursor-pointer text-red-600 hover:text-red-800"
+              className="h-8 w-8 p-0 text-red-600 hover:text-red-800"
             >
               {meta?.deletingId === peca.id ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -120,6 +125,7 @@ export const columns = (options: ColumnsOptions): ColumnDef<CutOut>[] => {
           </div>
         );
       },
+      size: 80,
     });
   }
 
