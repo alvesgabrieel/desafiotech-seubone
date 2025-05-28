@@ -24,6 +24,10 @@ export default function Table({
   isVisualizacao = false,
 }: TableProps) {
   const [rowSelection, setRowSelection] = useState({});
+  const [pagination, setPagination] = useState({
+    pageIndex: 0, // Página inicial
+    pageSize: 5, // 5 itens por página
+  });
 
   // Atualiza seleção em modo visualização
   useEffect(() => {
@@ -49,6 +53,8 @@ export default function Table({
           handleDelete,
           deletingId,
         }}
+        pagination={pagination}
+        onPaginationChange={setPagination}
       />
     </div>
   );
