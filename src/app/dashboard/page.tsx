@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { AppSidebar } from "@/components/app-sidebar";
 import { ModeToggle } from "@/components/mode-toogle";
 import ProtectedRoute from "@/components/protected-route";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -21,19 +22,30 @@ import Table from "../tabela/tabela";
 import { EditarPecaDialog } from "./components/editar-peca-dialog";
 import { RegistrarPecaDialog } from "./components/registrar-peca-dialog";
 
+type StatusFilter = "TODOS" | "ATIVO" | "INATIVO";
+
 export default function Page() {
   const { isLoading: isAuthLoading } = useAuthStore();
 
   const [pecas, setPecas] = useState<CutOut[]>([]);
+  const [filteredPecas, setFilteredPecas] = useState<CutOut[]>([]);
   const [isLoadingPecas, setIsLoadingPecas] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedPeca, setSelectedPeca] = useState<CutOut | null>(null);
 
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("TODOS");
+
   useEffect(() => {
     loadPecas();
   }, []);
+
+  useEffect(() => {
+    applyFilters();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pecas, searchQuery, statusFilter]);
 
   const loadPecas = async () => {
     setIsLoadingPecas(true);
@@ -50,6 +62,28 @@ export default function Page() {
     } finally {
       setIsLoadingPecas(false);
     }
+  };
+
+  const applyFilters = () => {
+    let filtered = [...pecas];
+
+    if (statusFilter !== "TODOS") {
+      filtered = filtered.filter((peca) => peca.status === statusFilter);
+    }
+
+    if (searchQuery.trim() !== "") {
+      const query = searchQuery.toLowerCase().trim();
+      filtered = filtered.filter(
+        (peca) =>
+          peca.key?.toLowerCase().includes(query) ||
+          peca.sku?.toLowerCase().includes(query) ||
+          peca.tipoProduto?.toLowerCase().includes(query) ||
+          String(peca.ordemDeExibição).includes(query) ||
+          peca.status?.toLowerCase().includes(query),
+      );
+    }
+
+    setFilteredPecas(filtered);
   };
 
   const handleDelete = async (id: string) => {
@@ -91,7 +125,6 @@ export default function Page() {
         peca.id === atualizarPeca.id ? atualizarPeca : peca,
       ),
     );
-    //Atualizar a lista de forma automatica ao salvar uma peça, sem precisar da reload na pagina
   };
 
   const handleViewMore = (peca: CutOut) => {
@@ -102,6 +135,14 @@ export default function Page() {
   const handleCloseDialog = () => {
     setSelectedPeca(null);
     setIsEditDialogOpen(false);
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleStatusFilterChange = (status: StatusFilter) => {
+    setStatusFilter(status);
   };
 
   if (isAuthLoading) {
@@ -131,12 +172,38 @@ export default function Page() {
           </div>
 
           <div className="my-4 flex flex-col gap-4 px-4 sm:my-7 sm:flex-row sm:justify-between sm:px-6">
-            <div className="flex-1"></div>
+            <div className="flex gap-7">
+              <Button
+                variant="ghost"
+                onClick={() => handleStatusFilterChange("TODOS")}
+                className={`px-4 py-2 ${statusFilter === "TODOS" ? "bg-[#440986] text-white hover:bg-[#440986]/90" : ""}`}
+              >
+                Todos
+              </Button>
+
+              <Button
+                variant="ghost"
+                onClick={() => handleStatusFilterChange("ATIVO")}
+                className={`px-4 py-2 ${statusFilter === "ATIVO" ? "bg-[#440986] text-white hover:bg-[#440986]/90" : ""}`}
+              >
+                Ativos
+              </Button>
+
+              <Button
+                variant="ghost"
+                onClick={() => handleStatusFilterChange("INATIVO")}
+                className={`px-4 py-2 ${statusFilter === "INATIVO" ? "bg-[#440986] text-white hover:bg-[#440986]/90" : ""}`}
+              >
+                Inativos
+              </Button>
+            </div>
             <div className="relative w-full sm:w-auto">
               <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 sm:h-5 sm:w-5" />
               <Input
-                placeholder="Buscar por título ou SKU..."
+                placeholder="Buscar por título, SKU, tipo, ordem ou status..."
                 className="w-full pl-10 sm:w-64"
+                value={searchQuery}
+                onChange={handleSearchChange}
               />
             </div>
           </div>
@@ -148,7 +215,7 @@ export default function Page() {
               </div>
             ) : (
               <Table
-                pecas={pecas}
+                pecas={filteredPecas}
                 handleView={handleViewMore}
                 handleDelete={handleDelete}
                 deletingId={deletingId}

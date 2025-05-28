@@ -20,17 +20,28 @@ import {
 import Table from "../tabela/tabela";
 import MontarImagemDialog from "./components/montar-imagem-dialog";
 
+type StatusFilter = "TODOS" | "ATIVO" | "INATIVO";
+
 export default function Visualizacao() {
   const [isLoadingPecas, setIsLoadingPecas] = useState(true);
   const [pecas, setPecas] = useState<CutOut[]>([]);
+  const [filteredPecas, setFilteredPecas] = useState<CutOut[]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedPecas, setSelectedPecas] = useState<CutOut[]>([]);
 
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("TODOS");
+
   useEffect(() => {
     loadPecas();
   }, []);
+
+  useEffect(() => {
+    applyFilters();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pecas, searchQuery, statusFilter]);
 
   const loadPecas = async () => {
     setIsLoadingPecas(true);
@@ -48,6 +59,27 @@ export default function Visualizacao() {
     }
   };
 
+  const applyFilters = () => {
+    let filtered = [...pecas];
+
+    if (statusFilter !== "TODOS") {
+      filtered = filtered.filter((peca) => peca.status === statusFilter);
+    }
+
+    if (searchQuery.trim() !== "") {
+      const query = searchQuery.toLowerCase().trim();
+      filtered = filtered.filter((peca) => {
+        if (peca.key?.toLowerCase().includes(query)) return true;
+        if (peca.sku?.toLowerCase().includes(query)) return true;
+        if (peca.tipoProduto?.toLowerCase().includes(query)) return true;
+        if (peca.status?.toLowerCase().includes(query)) return true;
+        String(peca.ordemDeExibição).includes(query);
+      });
+    }
+
+    setFilteredPecas(filtered);
+  };
+
   const handleGenerateImage = () => {
     if (selectedIds.length === 0) {
       toast.warning("Selecione pelo menos uma peça");
@@ -57,6 +89,14 @@ export default function Visualizacao() {
     const selecionadas = pecas.filter((p) => selectedIds.includes(p.id));
     setSelectedPecas(selecionadas);
     setIsDialogOpen(true);
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleStatusFilterChange = (status: StatusFilter) => {
+    setStatusFilter(status);
   };
 
   return (
@@ -75,12 +115,38 @@ export default function Visualizacao() {
             <h1 className="text-xl sm:text-2xl">Visualização da imagem</h1>
           </div>
           <div className="my-4 flex flex-col gap-4 px-4 sm:my-7 sm:flex-row sm:justify-between sm:px-6">
-            <div className="flex-1"></div>
+            <div className="flex gap-7">
+              <Button
+                variant="ghost"
+                onClick={() => handleStatusFilterChange("TODOS")}
+                className={`px-4 py-2 ${statusFilter === "TODOS" ? "bg-[#440986] text-white hover:bg-[#440986]/90" : ""}`}
+              >
+                Todos
+              </Button>
+
+              <Button
+                variant="ghost"
+                onClick={() => handleStatusFilterChange("ATIVO")}
+                className={`px-4 py-2 ${statusFilter === "ATIVO" ? "bg-[#440986] text-white hover:bg-[#440986]/90" : ""}`}
+              >
+                Ativos
+              </Button>
+
+              <Button
+                variant="ghost"
+                onClick={() => handleStatusFilterChange("INATIVO")}
+                className={`px-4 py-2 ${statusFilter === "INATIVO" ? "bg-[#440986] text-white hover:bg-[#440986]/90" : ""}`}
+              >
+                Inativos
+              </Button>
+            </div>
             <div className="relative w-full sm:w-auto">
               <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 sm:h-5 sm:w-5" />
               <Input
-                placeholder="Buscar por título ou SKU..."
+                placeholder="Buscar por título, SKU, tipo, ordem ou status..."
                 className="w-full pl-10 sm:w-64"
+                value={searchQuery}
+                onChange={handleSearchChange}
               />
             </div>
           </div>
@@ -92,7 +158,7 @@ export default function Visualizacao() {
               </div>
             ) : (
               <Table
-                pecas={pecas}
+                pecas={filteredPecas}
                 onSelectionChange={setSelectedIds}
                 isVisualizacao={true}
               />
@@ -101,7 +167,7 @@ export default function Visualizacao() {
 
           <div className="flex justify-center px-4 py-4 sm:px-6">
             <Button
-              className="w-full sm:w-auto"
+              className="w-full cursor-pointer bg-[#440986] text-white sm:w-auto dark:text-white dark:hover:bg-[#c28efdcb]"
               onClick={handleGenerateImage}
               disabled={selectedIds.length === 0}
             >

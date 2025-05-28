@@ -190,7 +190,7 @@ export function RegistrarPecaDialog({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-[#440986] text-white dark:text-white">
+        <Button className="cursor-pointer bg-[#440986] text-white dark:text-white dark:hover:bg-[#c28efdcb]">
           Cadastrar peça
         </Button>
       </DialogTrigger>
