@@ -112,7 +112,6 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
-/* Garante que as imagens tenham o mesmo tamanho e sejam centralizadas */
 .modelo-container {
   position: relative;
   width: 100%;
